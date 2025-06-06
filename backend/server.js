@@ -3,8 +3,12 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import {authRouter} from './routes/auth/auth-routes.js';
+import dotenv from 'dotenv';
 
-mongoose.connect("mongodb+srv://jinishgupta:Mom6october%23@cluster0.y8xqt6c.mongodb.net/").then(() => {
+dotenv.config();
+const MONGODB_KEY = process.env.MONGODB_KEY;
+
+mongoose.connect(MONGODB_KEY).then(() => {
   console.log("Connected to MongoDB");
 }
 ).catch(err => {
