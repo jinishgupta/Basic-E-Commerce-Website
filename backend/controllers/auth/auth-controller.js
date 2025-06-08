@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 import User from '../../models/user.js'
 
 //register
-
 const registerUser = async (req, res) => {
     console.log("Request body:", req.body);
     const { userName, email, password } = req.body;
@@ -73,7 +72,7 @@ const loginUser = async (req, res) => {
                 message: "Invalid password"
             });
         }
-        const token = jwt.sign({ id: user._id, role: user.role, email: user.email }, 'CLIENT_SECRET_KEY', { expiresIn: '60m' });
+        const token = jwt.sign({ id: user._id, role: user.role, email: user.email }, 'CLIENT_SECRET_KEY', { expiresIn: '240m' });
         res.cookie('token', token, { httpOnly: true, secure: false }).json({
             success: true,
             message: "Login successful",
@@ -97,6 +96,7 @@ const loginUser = async (req, res) => {
 
 const logoutUser = async (req, res) => {
     try {
+        console.log("Logging out user");
         res.clearCookie('token').json({
             success: true,
             message: "Logout successful"
