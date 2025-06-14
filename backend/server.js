@@ -5,6 +5,7 @@ import cors from 'cors';
 import {authRouter} from './routes/auth/auth-routes.js';
 import dotenv from 'dotenv';
 import { adminProductRouter } from './routes/admin/product-routes.js';
+import { userProductRouter } from './routes/shopping/product-routes.js';
 
 dotenv.config();
 const MONGODB_KEY = process.env.MONGODB_KEY;
@@ -31,5 +32,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductRouter);
+app.use("/api/shopping/products", userProductRouter); 
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

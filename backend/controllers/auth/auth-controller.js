@@ -72,7 +72,7 @@ const loginUser = async (req, res) => {
                 message: "Invalid password"
             });
         }
-        const token = jwt.sign({ id: user._id, role: user.role, email: user.email }, 'CLIENT_SECRET_KEY', { expiresIn: '240m' });
+        const token = jwt.sign({ id: user._id, role: user.role, email: user.email, userName: user.userName}, 'CLIENT_SECRET_KEY', { expiresIn: '240m' });
         res.cookie('token', token, { httpOnly: true, secure: false }).json({
             success: true,
             message: "Login successful",
@@ -80,6 +80,7 @@ const loginUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 id: user._id,
+                userName: user.userName
             }
         });
 
@@ -112,7 +113,7 @@ const logoutUser = async (req, res) => {
 
 //middleware
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
     const token = req.cookies.token;
     if (!token) {
         return res.status(401).json({
@@ -122,7 +123,7 @@ const authMiddleware = (req, res, next) => {
     }
     try {
         const decoded = jwt.verify(token, 'CLIENT_SECRET_KEY');
-        req.user = decoded;
+        req.user = await User.findById(decoded.id).select('-password');
         next();
     } catch (e) {
         console.log(e);
